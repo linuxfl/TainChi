@@ -1,0 +1,11 @@
+COPC is 0.874090
+End load data, 2065 pos 117935 neg
+Valid data's pos_rate is 0.017208
+Valid data's MAE is 0.035867, MSE is 0.016776
+write q_dist to q_dist.csv
+write q_dist to qq_plot.csv
+Begin to cal AUC..
+AUC is 0.671212
+Begin to cal Logloss..
+Logloss is 0.083747
+NE is 0.962983
