@@ -5,13 +5,13 @@ import operator
 from math import log
 
 def help():
-	print "python predict_out_file"
-	print "format: predict_score label(0|1) +"
-	print "qauc is not implement"
-	sys.exit(1)
+  print "python predict_out_file"
+  print "format: predict_score label(0|1) +"
+  print "qauc is not implement"
+  sys.exit(1)
 
 if len(sys.argv) < 2:
-	print help
+  print help
 
 predict_list = []
 predict_file = open(sys.argv[1], 'r')
@@ -31,25 +31,25 @@ t_click = 0.0
 print "Begin to load data and sort to cal AUC and MSE LOGLOSS"
 
 for line in predict_file:
-	fleds = line.strip().split(" ")
-	label = int(fleds[1])
-	pre_score = float(fleds[0])
-	p_click = p_click + pre_score
-	slot = int(pre_score * seg_size)
-	q_dist[slot] = q_dist[slot] + 1
-	qq_plot[slot][0] = qq_plot[slot][0] + 1
-	if label != 1:
-		label = 0
-		neg_num = neg_num + 1
-		mae = mae + pre_score
-		mse = mse + pre_score * pre_score
-	else:
-		pos_num = pos_num + 1
-		t_click = t_click + 1
-		mae = mae + 1 - pre_score
-		mse = mse + (1 - pre_score) * (1 - pre_score)
-		qq_plot[slot][1] = qq_plot[slot][1] + 1
-	predict_list.append((pre_score, label))
+  fleds = line.strip().split(" ")
+  label = int(fleds[1])
+  pre_score = float(fleds[0])
+  p_click = p_click + pre_score
+  slot = int(pre_score * seg_size)
+  q_dist[slot] = q_dist[slot] + 1
+  qq_plot[slot][0] = qq_plot[slot][0] + 1
+  if label != 1:
+    label = 0
+    neg_num = neg_num + 1
+    mae = mae + pre_score
+    mse = mse + pre_score * pre_score
+  else:
+    pos_num = pos_num + 1
+    t_click = t_click + 1
+    mae = mae + 1 - pre_score
+    mse = mse + (1 - pre_score) * (1 - pre_score)
+    qq_plot[slot][1] = qq_plot[slot][1] + 1
+  predict_list.append((pre_score, label))
 predict_file.close()
 
 total = neg_num + pos_num
@@ -76,10 +76,10 @@ qq_list = [0.0] * (seg_size + 1)
 q_show = [0] * (seg_size + 1)
 q_click = [0] * (seg_size + 1)
 for index in range(0, seg_size + 1):
-	q_show[index] = qq_plot[index][0]
-	q_click[index] = qq_plot[index][1]
-	if qq_plot[index][0] != 0:
-		qq_list[index] = qq_plot[index][1] / (qq_plot[index][0] + 0.0)
+  q_show[index] = qq_plot[index][0]
+  q_click[index] = qq_plot[index][1]
+  if qq_plot[index][0] != 0:
+    qq_list[index] = qq_plot[index][1] / (qq_plot[index][0] + 0.0)
 
 print "write q_dist to qq_plot.csv"""
 qq_file = open("qq_plot.csv", 'w')
@@ -99,9 +99,9 @@ predict_list.sort(key=operator.itemgetter(0), reverse=True)
 index = 0
 total_score = 0
 for item in predict_list:
-	if item[1] == 1:
-		total_score = total_score + total - index
-	index = index + 1
+  if item[1] == 1:
+    total_score = total_score + total - index
+  index = index + 1
 total_score = total_score - pos_num * (pos_num + 1.0) / 2.0
 auc = total_score / (pos_num * neg_num)
 
@@ -112,10 +112,11 @@ print "Begin to cal Logloss.."
 logloss = 0
 
 for item in predict_list:
-	if item[1] == 1:
-		logloss = logloss + math.log(item[0])
-	else:
-		logloss = logloss + math.log(1 - item[0])
+  if item[1] == 1 and item[0] != 0:
+    logloss = logloss + math.log(item[0])
+  else:
+    if item[0] != 1:
+      logloss = logloss + math.log(1 - item[0])
 logloss = -logloss / total
 
 print("Logloss is %f" % logloss)
