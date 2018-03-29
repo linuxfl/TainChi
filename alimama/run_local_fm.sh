@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $1 == "test" ]];then
-  python script/_1_fea.py ./data/train.log.pre ./data/train.log.fea
+  python script/_1_fea.py ./data/train.log.pre ./data/train.log.fea 1
 	./bin/adfea conf/_1_run.conf
   ./bin/gbdt_predict ./conf/gbdt.conf
   head -460138 ./instance/train.ins.gbdt > ./instance/shitu.train
@@ -15,7 +15,7 @@ if [[ $1 == "test" ]];then
 else
   cat ./data/train.log.pre > ./data/train
   cat ./data/test.log.pre >> ./data/train
-  python script/_1_fea.py ./data/train ./data/train.fea
+  python script/_1_fea.py ./data/train ./data/train.fea 0
   ./bin/adfea conf/run_online.conf
   ./bin/gbdt_predict conf/gbdt_online.conf
   python script/split.py ./instance/ins.gbdt ./instance/train.ins ./instance/test.ins
